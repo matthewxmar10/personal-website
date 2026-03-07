@@ -47,4 +47,7 @@ guestbook.db
 /.claude/
 
 # Copyrighted audio assets — add manually after cloning
-/public/audio/
+/public/audio/*.m4a
+/public/audio/*.mp3
+/public/audio/*.aac
+/public/audio/*.ogg
