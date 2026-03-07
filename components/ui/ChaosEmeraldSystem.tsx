@@ -242,6 +242,11 @@ function PageEmerald() {
             background: 'none',
             border: 'none',
             padding: 0,
+            margin: 0,
+            // Explicit size so ClickMeBubble's left:50% centres precisely
+            width: '48px',
+            height: '56px',
+            overflow: 'visible',
             cursor: 'pointer',
           }}
           initial={{ opacity: 0, scale: 0 }}
