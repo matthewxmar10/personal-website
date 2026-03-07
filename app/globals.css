@@ -1,26 +1,625 @@
 @import "tailwindcss";
 
+/* ─── Tailwind Design Tokens ─────────────────────────── */
+@theme {
+  --font-mono: var(--font-jetbrains-mono), 'JetBrains Mono', 'Courier New', monospace;
+  --font-sans: var(--font-inter), 'Inter', system-ui, sans-serif;
+  --spacing-nav: 56px;
+  --radius-sm: 2px;
+  --radius-md: 4px;
+}
+
+/* ─── Themeable CSS Variables ───────────────────────── */
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  /* Dark mode defaults */
+  --c-bg:              #0A0A0A;
+  --c-surface:         #111111;
+  --c-surface-alt:     #161616;
+  --c-border:          #1E1E1E;
+  --c-text:            #E8E6E1;
+  --c-text-sub:        #888888;
+  --c-muted:           #888888;
+  --c-accent:          #00E5FF;
+  --c-accent-rgb:      0, 229, 255;
+  --c-accent-dim:      rgba(0, 229, 255, 0.12);
+  --c-accent-alt:      #FF6B6B;
+  --c-nav-bg:          rgba(10, 10, 10, 0.8);
+  --c-nav-bg-scroll:   rgba(10, 10, 10, 0.95);
+  --c-dropdown-bg:     #111111;
+  --c-mobile-menu-bg:  rgba(10, 10, 10, 0.97);
+  --c-input-bg:        #111111;
+  --c-scrollbar-track: #0A0A0A;
+  --c-scrollbar-thumb: #2A2A2A;
+  --c-selection-bg:    rgba(0, 229, 255, 0.2);
+  --c-selection-text:  #00E5FF;
 }
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+[data-theme="light"] {
+  --c-bg:              #EDEBE5;
+  --c-surface:         #E4E1DB;
+  --c-surface-alt:     #DAD7D2;
+  --c-border:          #1A1A1A;
+  --c-text:            #0D0D0D;
+  --c-text-sub:        #2A2A2A;
+  --c-muted:           #555555;
+  --c-accent:          #007FA3;
+  --c-accent-rgb:      0, 127, 163;
+  --c-accent-dim:      rgba(0, 127, 163, 0.1);
+  --c-accent-alt:      #CC3333;
+  --c-nav-bg:          rgba(237, 235, 229, 0.8);
+  --c-nav-bg-scroll:   rgba(237, 235, 229, 0.96);
+  --c-dropdown-bg:     #E4E1DB;
+  --c-mobile-menu-bg:  rgba(237, 235, 229, 0.98);
+  --c-input-bg:        #E4E1DB;
+  --c-scrollbar-track: #EDEBE5;
+  --c-scrollbar-thumb: #1A1A1A;
+  --c-selection-bg:    rgba(0, 127, 163, 0.2);
+  --c-selection-text:  #007FA3;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+/* ─── Skip to Content Link ─────────────────────────────── */
+.skip-to-content {
+  position: absolute;
+  top: -100%;
+  left: 0;
+  z-index: 99999;
+  padding: 0.75rem 1.5rem;
+  background: var(--c-accent);
+  color: var(--c-bg);
+  font-family: var(--font-mono);
+  font-size: 0.8rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  text-decoration: none;
+  border-radius: 0 0 4px 0;
+  transition: top 0.1s ease;
+}
+
+.skip-to-content:focus {
+  top: 0;
+  outline: 2px solid var(--c-bg);
+  outline-offset: 2px;
+}
+
+/* ─── Base Reset & Globals ─────────────────────────────── */
+*, *::before, *::after {
+  box-sizing: border-box;
+  cursor: none !important;
+}
+
+/* ─── Focus Visible (accessibility) ───────────────────── */
+:focus-visible {
+  outline: 2px solid var(--c-accent);
+  outline-offset: 3px;
+  border-radius: 2px;
+}
+
+/* Restore cursor on touch / pointer-based AT */
+@media (pointer: coarse) {
+  *, *::before, *::after {
+    cursor: auto !important;
   }
 }
 
+/* ─── Reduced Motion ───────────────────────────────────── */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+html {
+  background-color: var(--c-bg);
+  color: var(--c-text);
+  font-family: var(--font-sans);
+  font-size: 16px;
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  scroll-behavior: smooth;
+  transition: background-color 0.25s ease, color 0.25s ease;
+}
+
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  background-color: var(--c-bg);
+  color: var(--c-text);
+  min-height: 100vh;
+  position: relative;
+  overflow-x: hidden;
+  transition: background-color 0.25s ease, color 0.25s ease;
+}
+
+/* ─── Scanline Overlay ─────────────────────────────────── */
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 9998;
+}
+
+[data-theme="dark"] body::before,
+:root:not([data-theme="light"]) body::before {
+  background: repeating-linear-gradient(
+    0deg,
+    transparent,
+    transparent 2px,
+    rgba(0, 0, 0, 0.04) 2px,
+    rgba(0, 0, 0, 0.04) 4px
+  );
+}
+
+[data-theme="light"] body::before {
+  background: repeating-linear-gradient(
+    0deg,
+    transparent,
+    transparent 2px,
+    rgba(0, 0, 0, 0.015) 2px,
+    rgba(0, 0, 0, 0.015) 4px
+  );
+}
+
+/* ─── Scrollbar ────────────────────────────────────────── */
+::-webkit-scrollbar { width: 6px; }
+::-webkit-scrollbar-track  { background: var(--c-scrollbar-track); }
+::-webkit-scrollbar-thumb  { background: var(--c-scrollbar-thumb); border-radius: 2px; }
+::-webkit-scrollbar-thumb:hover { background: rgba(var(--c-accent-rgb), 0.4); }
+
+/* ─── Typography ───────────────────────────────────────── */
+h1, h2, h3, h4, h5, h6 {
+  font-family: var(--font-mono);
+  font-weight: 500;
+  letter-spacing: -0.02em;
+  line-height: 1.2;
+  color: var(--c-text);
+  transition: color 0.25s ease;
+}
+
+a { color: inherit; text-decoration: none; }
+
+p {
+  color: var(--c-text);
+  line-height: 1.7;
+  transition: color 0.25s ease;
+}
+
+::selection {
+  background: var(--c-selection-bg);
+  color: var(--c-selection-text);
+}
+
+/* ─── Glow Utilities ───────────────────────────────────── */
+.glow-text {
+  text-shadow:
+    0 0 8px rgba(var(--c-accent-rgb), 0.6),
+    0 0 20px rgba(var(--c-accent-rgb), 0.3);
+}
+
+.glow-text-sm {
+  text-shadow:
+    0 0 5px rgba(var(--c-accent-rgb), 0.5),
+    0 0 12px rgba(var(--c-accent-rgb), 0.25);
+}
+
+.glow-border {
+  border: 1px solid var(--c-border);
+  transition: border-color 0.2s ease, box-shadow 0.2s ease, background 0.25s ease;
+}
+
+.glow-border:hover {
+  border-color: rgba(var(--c-accent-rgb), 0.4);
+  box-shadow:
+    0 0 12px rgba(var(--c-accent-rgb), 0.12),
+    inset 0 0 12px rgba(var(--c-accent-rgb), 0.03);
+}
+
+/* ─── Card / Surface ───────────────────────────────────── */
+.card {
+  background: var(--c-surface);
+  border: 1px solid var(--c-border);
+  border-radius: 2px;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease, transform 0.2s ease, background 0.25s ease;
+}
+
+.card:hover {
+  border-color: rgba(var(--c-accent-rgb), 0.3);
+  box-shadow: 0 0 16px rgba(var(--c-accent-rgb), 0.1);
+  transform: translateY(-2px);
+}
+
+/* ─── Nav Link Styles ──────────────────────────────────── */
+.nav-link {
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--c-muted);
+  transition: color 0.15s ease, text-shadow 0.15s ease;
+  position: relative;
+}
+
+.nav-link:hover,
+.nav-link.active {
+  color: var(--c-accent);
+  text-shadow: 0 0 8px rgba(var(--c-accent-rgb), 0.5);
+}
+
+.nav-link.active::after {
+  content: '';
+  position: absolute;
+  bottom: -4px;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background: var(--c-accent);
+  box-shadow: 0 0 6px rgba(var(--c-accent-rgb), 0.7);
+}
+
+/* ─── Button Styles ────────────────────────────────────── */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.5rem 1rem;
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  background: transparent;
+  border: 1px solid var(--c-border);
+  border-radius: 2px;
+  color: var(--c-muted);
+  transition: all 0.15s ease;
+  cursor: pointer;
+}
+
+.btn:hover {
+  border-color: rgba(var(--c-accent-rgb), 0.5);
+  color: var(--c-accent);
+  box-shadow: 0 0 10px rgba(var(--c-accent-rgb), 0.2);
+}
+
+.btn-accent {
+  border-color: rgba(var(--c-accent-rgb), 0.4);
+  color: var(--c-accent);
+}
+
+.btn-accent:hover {
+  background: rgba(var(--c-accent-rgb), 0.08);
+  box-shadow: 0 0 15px rgba(var(--c-accent-rgb), 0.25);
+}
+
+/* ─── Form Styles ──────────────────────────────────────── */
+input, textarea, select {
+  background: var(--c-input-bg);
+  border: 1px solid var(--c-border);
+  border-radius: 2px;
+  color: var(--c-text);
+  font-family: var(--font-sans);
+  font-size: 0.9rem;
+  padding: 0.6rem 0.8rem;
+  width: 100%;
+  outline: none;
+  transition: border-color 0.15s ease, box-shadow 0.15s ease, background 0.25s ease;
+}
+
+input:focus, textarea:focus, select:focus {
+  border-color: rgba(var(--c-accent-rgb), 0.5);
+  box-shadow: 0 0 0 2px rgba(var(--c-accent-rgb), 0.08);
+}
+
+input::placeholder, textarea::placeholder {
+  color: var(--c-muted);
+  opacity: 0.6;
+}
+
+label {
+  font-family: var(--font-mono);
+  font-size: 0.7rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--c-muted);
+  display: block;
+  margin-bottom: 0.4rem;
+}
+
+/* ─── Divider ──────────────────────────────────────────── */
+.divider {
+  height: 1px;
+  background: linear-gradient(90deg, transparent, var(--c-border) 20%, var(--c-border) 80%, transparent);
+  margin: 2rem 0;
+}
+
+/* ─── Accent Tag ───────────────────────────────────────── */
+.tag {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.15rem 0.5rem;
+  font-family: var(--font-mono);
+  font-size: 0.65rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  border: 1px solid var(--c-border);
+  border-radius: 2px;
+  color: var(--c-muted);
+}
+
+.tag-accent {
+  border-color: rgba(var(--c-accent-rgb), 0.3);
+  color: var(--c-accent);
+  background: rgba(var(--c-accent-rgb), 0.05);
+}
+
+/* ─── Page Layout ──────────────────────────────────────── */
+.page-content {
+  padding-top: var(--spacing-nav);
+  min-height: 100vh;
+}
+
+.container {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 0 1.5rem;
+}
+
+/* ─── Homepage background gradient (themed) ────────────── */
+.homepage-bg {
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  background:
+    radial-gradient(ellipse 80% 60% at 20% 40%, rgba(0, 229, 255, 0.04) 0%, transparent 60%),
+    radial-gradient(ellipse 60% 80% at 80% 70%, rgba(255, 107, 107, 0.03) 0%, transparent 60%),
+    #0A0A0A;
+  transition: background 0.3s ease;
+}
+
+[data-theme="light"] .homepage-bg {
+  background:
+    radial-gradient(ellipse 80% 60% at 20% 40%, rgba(0, 127, 163, 0.06) 0%, transparent 60%),
+    radial-gradient(ellipse 60% 80% at 80% 70%, rgba(200, 80, 80, 0.025) 0%, transparent 60%),
+    #EDEBE5 !important;
+}
+
+/* ─── Keyframes ────────────────────────────────────────── */
+@keyframes flicker {
+  0%, 100% { opacity: 1; }
+  92%  { opacity: 1; }
+  93%  { opacity: 0.7; }
+  94%  { opacity: 1; }
+  96%  { opacity: 0.8; }
+  97%  { opacity: 1; }
+}
+
+@keyframes pulse-glow {
+  0%, 100% { box-shadow: 0 0 8px rgba(var(--c-accent-rgb), 0.3); }
+  50%       { box-shadow: 0 0 16px rgba(var(--c-accent-rgb), 0.6), 0 0 30px rgba(var(--c-accent-rgb), 0.2); }
+}
+
+/* ─── Page Flip Styles ─────────────────────────────────── */
+.flip-book-container {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.page-flip-wrapper { position: relative; }
+
+.book-page {
+  background: var(--c-surface);
+  border: 1px solid var(--c-border);
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem;
+  transition: background 0.25s ease;
+}
+
+/* ─── Prose (blog / journal content) ──────────────────── */
+.prose {
+  color: var(--c-text);
+  max-width: 65ch;
+}
+
+.prose p {
+  margin-bottom: 1.25rem;
+  line-height: 1.8;
+}
+
+.prose h2 {
+  margin-top: 2rem;
+  margin-bottom: 0.75rem;
+  font-size: 1.25rem;
+  color: var(--c-accent);
+}
+
+.prose h3 {
+  margin-top: 1.5rem;
+  margin-bottom: 0.5rem;
+  font-size: 1rem;
+  color: var(--c-text);
+}
+
+.prose a {
+  color: var(--c-accent);
+  text-decoration: underline;
+  text-decoration-color: rgba(var(--c-accent-rgb), 0.3);
+}
+
+.prose a:hover {
+  text-shadow: 0 0 8px rgba(var(--c-accent-rgb), 0.5);
+}
+
+.prose code {
+  font-family: var(--font-mono);
+  font-size: 0.85em;
+  background: var(--c-surface-alt);
+  border: 1px solid var(--c-border);
+  padding: 0.1em 0.3em;
+  border-radius: 2px;
+  color: var(--c-accent);
+}
+
+.prose blockquote {
+  border-left: 2px solid rgba(var(--c-accent-rgb), 0.4);
+  padding-left: 1rem;
+  color: var(--c-text-sub);
+  font-style: italic;
+}
+
+/* ─── Screen Reader Only ───────────────────────────────── */
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border-width: 0;
+}
+
+/* ─── CSS Hover Utilities (for server components) ─────── */
+.hover-lift {
+  transition: transform 0.15s ease, border-color 0.15s ease;
+}
+.hover-lift:hover { transform: translateY(-2px); }
+
+.hover-glow-border {
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+.hover-glow-border:hover {
+  border-color: rgba(var(--c-accent-rgb), 0.25) !important;
+  box-shadow: 0 0 12px rgba(var(--c-accent-rgb), 0.08);
+}
+
+.hover-accent { transition: color 0.15s ease; }
+.hover-accent:hover { color: var(--c-accent); }
+
+.hover-lift-glow {
+  transition: transform 0.15s ease, border-color 0.2s ease, box-shadow 0.2s ease;
+}
+.hover-lift-glow:hover {
+  transform: translateY(-1px);
+  border-color: rgba(var(--c-accent-rgb), 0.25) !important;
+  box-shadow: 0 0 12px rgba(var(--c-accent-rgb), 0.08);
+}
+
+/* ─── Chaos Emerald — gem spin ────────────────────────── */
+/*
+ * Applied to the inner wrapper inside PageEmerald so CSS handles rotation
+ * independently of Framer Motion's y-float on the outer button.
+ */
+.emerald-spin-wrapper {
+  display: block;
+  animation: emeraldSpin 6s linear infinite;
+  will-change: transform;
+}
+
+@keyframes emeraldSpin {
+  from { transform: rotate(0deg); }
+  to   { transform: rotate(360deg); }
+}
+
+/* ─── Chaos Emerald — falling ring ────────────────────── */
+/*
+ * Used by EmeraldSuccessModal — each .ring-fall element is a golden ring
+ * that drops from the top to the bottom of the overlay.
+ */
+.ring-fall {
+  border-radius: 50%;
+  border: 3px solid #FFD700;
+  box-shadow: 0 0 8px #FFD700, 0 0 18px rgba(255,215,0,0.4), inset 0 0 6px rgba(255,215,0,0.2);
+  animation: ringFall 2s linear infinite;
+  will-change: transform, opacity;
+}
+
+@keyframes ringFall {
+  0% {
+    transform: translateY(-60px) rotate(0deg) scale(1);
+    opacity: 0;
+  }
+  8%   { opacity: 1; }
+  88%  { opacity: 0.7; }
+  100% {
+    transform: translateY(108vh) rotate(540deg) scale(0.85);
+    opacity: 0;
+  }
+}
+
+/* ─── Chaos Emerald — volume slider ───────────────────── */
+/*
+ * Used by EmeraldSuccessModal — gold-accented range input.
+ */
+.volume-slider {
+  -webkit-appearance: none;
+  appearance: none;
+  height: 3px;
+  border-radius: 2px;
+  background: #333;
+  outline: none;
+  cursor: pointer;
+}
+
+.volume-slider::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background: #FFD700;
+  box-shadow: 0 0 6px rgba(255, 215, 0, 0.55);
+  cursor: pointer;
+  transition: box-shadow 0.15s ease, transform 0.15s ease;
+}
+
+.volume-slider::-moz-range-thumb {
+  width: 12px;
+  height: 12px;
+  border: none;
+  border-radius: 50%;
+  background: #FFD700;
+  box-shadow: 0 0 6px rgba(255, 215, 0, 0.55);
+  cursor: pointer;
+  transition: box-shadow 0.15s ease, transform 0.15s ease;
+}
+
+.volume-slider::-webkit-slider-thumb:hover {
+  box-shadow: 0 0 10px rgba(255, 215, 0, 0.8);
+  transform: scale(1.15);
+}
+
+.volume-slider::-moz-range-thumb:hover {
+  box-shadow: 0 0 10px rgba(255, 215, 0, 0.8);
+  transform: scale(1.15);
+}
+
+/* ─── Emoji Picker ─────────────────────────────────────── */
+.emoji-grid {
+  display: grid;
+  grid-template-columns: repeat(8, 1fr);
+  gap: 4px;
+}
+
+.emoji-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  font-size: 1.1rem;
+  border-radius: 2px;
+  transition: background 0.1s ease;
+}
+
+.emoji-btn:hover {
+  background: rgba(var(--c-accent-rgb), 0.1);
 }

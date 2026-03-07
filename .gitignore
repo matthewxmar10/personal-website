@@ -39,3 +39,12 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# SQLite guestbook database (contains user data)
+guestbook.db
+
+# Claude project memory (private)
+/.claude/
+
+# Copyrighted audio assets — add manually after cloning
+/public/audio/
