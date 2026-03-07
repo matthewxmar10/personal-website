@@ -127,7 +127,10 @@ function ClickMeBubble({ theme }: { theme: string }) {
         position: 'absolute',
         bottom: 'calc(100% + 14px)',
         left: '50%',
-        transform: 'translateX(-50%)',
+        // x:'-50%' lets Framer Motion own the centering offset inside its
+        // transform — CSS `transform:'translateX(-50%)'` gets overwritten the
+        // moment Framer Motion applies the y-bob animation, shifting the bubble.
+        x: '-50%',
         whiteSpace: 'nowrap',
         background: bg,
         border: `1px solid ${border}`,
@@ -150,12 +153,13 @@ function ClickMeBubble({ theme }: { theme: string }) {
       }}
     >
       click me
-      {/* Triangle pointer pointing down toward the gem */}
+      {/* Triangle pointer — marginLeft centres the 0-width element without
+          using CSS transform (which Framer Motion would overwrite on parent) */}
       <div style={{
         position: 'absolute',
         bottom: '-6px',
         left: '50%',
-        transform: 'translateX(-50%)',
+        marginLeft: '-6px',
         width: 0, height: 0,
         borderLeft: '6px solid transparent',
         borderRight: '6px solid transparent',
@@ -165,7 +169,7 @@ function ClickMeBubble({ theme }: { theme: string }) {
         position: 'absolute',
         bottom: '-4px',
         left: '50%',
-        transform: 'translateX(-50%)',
+        marginLeft: '-5px',
         width: 0, height: 0,
         borderLeft: '5px solid transparent',
         borderRight: '5px solid transparent',
