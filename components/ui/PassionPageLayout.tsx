@@ -17,6 +17,8 @@ interface PassionPageLayoutProps {
   breadcrumbLabel: string;
   breadcrumbHref: string;
   reelLabel?: string;
+  reelSectionTitle?: string;   // small heading shown above the video player
+  reelSrc?: string;            // YouTube embed URL — shows real player when provided
   credits?: Credit[];
   creditsSectionTitle?: string;
   extraContent?: React.ReactNode;
@@ -28,6 +30,8 @@ export default function PassionPageLayout({
   breadcrumbLabel,
   breadcrumbHref,
   reelLabel = 'Sizzle Reel',
+  reelSectionTitle,
+  reelSrc,
   credits = [],
   creditsSectionTitle = 'Credits',
   extraContent,
@@ -44,10 +48,45 @@ export default function PassionPageLayout({
           ]}
         />
 
-        {/* Reel embed */}
+        {/* Reel section */}
         <ScrollReveal>
-          <div
-            style={{
+          {/* Optional heading above the player */}
+          {reelSectionTitle && (
+            <h2 style={{
+              fontFamily: 'var(--font-mono)',
+              fontSize: '0.85rem',
+              fontWeight: 500,
+              letterSpacing: '0.08em',
+              textTransform: 'uppercase',
+              color: '#444444',
+              marginBottom: '1rem',
+              marginTop: 0,
+            }}>
+              {reelSectionTitle}
+            </h2>
+          )}
+
+          {reelSrc ? (
+            /* Real video embed */
+            <div style={{
+              width: '100%',
+              aspectRatio: '16/9',
+              marginBottom: '3rem',
+              border: '1px solid #1E1E1E',
+              borderRadius: '2px',
+              overflow: 'hidden',
+            }}>
+              <iframe
+                src={reelSrc}
+                title={reelSectionTitle ?? reelLabel}
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                allowFullScreen
+                style={{ width: '100%', height: '100%', border: 'none', display: 'block' }}
+              />
+            </div>
+          ) : (
+            /* Placeholder */
+            <div style={{
               width: '100%',
               aspectRatio: '16/9',
               background: '#111111',
@@ -59,16 +98,16 @@ export default function PassionPageLayout({
               justifyContent: 'center',
               gap: '0.75rem',
               marginBottom: '3rem',
-            }}
-          >
-            <div style={{ fontSize: '2rem', opacity: 0.3 }}>▶</div>
-            <div style={{ fontFamily: 'var(--font-mono)', fontSize: '0.65rem', letterSpacing: '0.12em', textTransform: 'uppercase', color: '#333333' }}>
-              {reelLabel} — Coming Soon
+            }}>
+              <div style={{ fontSize: '2rem', opacity: 0.3 }}>▶</div>
+              <div style={{ fontFamily: 'var(--font-mono)', fontSize: '0.65rem', letterSpacing: '0.12em', textTransform: 'uppercase', color: '#333333' }}>
+                {reelLabel} — Coming Soon
+              </div>
+              <p style={{ fontFamily: 'var(--font-sans)', fontSize: '0.8rem', color: '#2A2A2A', textAlign: 'center', maxWidth: '300px' }}>
+                Replace this with a YouTube/Vimeo embed URL
+              </p>
             </div>
-            <p style={{ fontFamily: 'var(--font-sans)', fontSize: '0.8rem', color: '#2A2A2A', textAlign: 'center', maxWidth: '300px' }}>
-              Replace this with a YouTube/Vimeo embed URL
-            </p>
-          </div>
+          )}
         </ScrollReveal>
 
         {/* Extra content (links, gaming profiles, etc.) */}

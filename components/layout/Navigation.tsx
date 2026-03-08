@@ -26,7 +26,7 @@ const NAV_ITEMS: NavItem[] = [
     label: 'Professional',
     children: [
       { label: 'What I Do', href: '/professional/what-i-do' },
-      { label: 'Portfolio', href: '/professional/portfolio' },
+      { label: 'Design Portfolio', href: '/professional/portfolio' },
       { label: 'Resume', href: '/professional/resume' },
     ],
   },
