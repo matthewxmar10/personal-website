@@ -597,8 +597,10 @@ export default function PhotoAlbum() {
               position: 'fixed', inset: 0, zIndex: 9000,
               background: 'rgba(0,0,0,0.88)',
               display: 'flex',
+              flexDirection: 'column',
               alignItems: 'center',
               justifyContent: 'center',
+              gap: '1.25rem',
               padding: '1.5rem',
             }}
           >
@@ -790,6 +792,11 @@ export default function PhotoAlbum() {
                 </button>
               </div>
             </motion.div>
+
+            {/* ── Tag strip inside modal ── */}
+            <div onClick={e => e.stopPropagation()}>
+              <TagStrip activeTags={activeTags} onToggle={toggleTag} />
+            </div>
           </motion.div>
         )}
       </AnimatePresence>
