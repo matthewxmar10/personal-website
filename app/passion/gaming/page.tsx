@@ -6,6 +6,12 @@ export const metadata = { title: 'Gaming — Matthew' };
 
 const GAMING_PROFILES = [
   {
+    platform: 'Wise Old Man',
+    description: 'OSRS profile and accomplishments.',
+    href: 'https://wiseoldman.net/players/matthewu',
+    icon: '⚔️',
+  },
+  {
     platform: 'FACEIT',
     description: 'Competitive CS stats and ranking.',
     href: 'https://www.faceit.com/en/players/matthewx',
@@ -16,12 +22,6 @@ const GAMING_PROFILES = [
     description: 'Speedrunning records and categories.',
     href: 'https://www.speedrun.com/users/matthew1pg',
     icon: '⏱',
-  },
-  {
-    platform: 'Old School RuneScape',
-    description: 'OSRS profile and accomplishments.',
-    href: 'https://wiseoldman.net/players/matthewu',
-    icon: '⚔️',
   },
 ];
 
