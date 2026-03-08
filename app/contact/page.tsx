@@ -153,7 +153,7 @@ export default function ContactPage() {
                 <input
                   id="contact-subject"
                   type="text"
-                  placeholder="What&apos;s this about?"
+                  placeholder="What's this about?"
                   value={subject}
                   onChange={e => setSubject(e.target.value)}
                 />
@@ -173,7 +173,7 @@ export default function ContactPage() {
               </div>
 
               {status === 'error' && (
-                <p style={{ fontFamily: 'var(--font-mono)', fontSize: '0.7rem', color: '#FF6B6B', margin: 0 }}>
+                <p role="alert" style={{ fontFamily: 'var(--font-mono)', fontSize: '0.7rem', color: 'var(--c-accent-alt)', margin: 0 }}>
                   ✕ {errMsg}
                 </p>
               )}

@@ -57,9 +57,10 @@ export default function CursorFollower() {
 
   return (
     <>
-      {/* Inner dot */}
+      {/* Inner dot — class used by forced-colors CSS to hide in high-contrast mode */}
       <div
         ref={dotRef}
+        className="cursor-dot"
         style={{
           position: 'fixed',
           top: 0,
@@ -75,9 +76,10 @@ export default function CursorFollower() {
           willChange: 'transform',
         }}
       />
-      {/* Outer ring */}
+      {/* Outer ring — class used by forced-colors CSS to hide in high-contrast mode */}
       <div
         ref={ringRef}
+        className="cursor-ring"
         style={{
           position: 'fixed',
           top: 0,
