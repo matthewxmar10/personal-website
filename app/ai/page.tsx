@@ -58,7 +58,7 @@ export default function AiDisclosurePage() {
             <p style={{
               fontFamily:   'var(--font-sans)',
               fontSize:     '0.9rem',
-              color:        '#A8A49E',
+              color:        'var(--c-text-sub)',
               lineHeight:   1.75,
               margin:       0,
             }}>
@@ -76,7 +76,7 @@ export default function AiDisclosurePage() {
               fontWeight:    500,
               letterSpacing: '0.1em',
               textTransform: 'uppercase',
-              color:         '#00E5FF',
+              color:         'var(--c-accent)',
               marginBottom:  '1.75rem',
               marginTop:     0,
             }}>
@@ -90,7 +90,7 @@ export default function AiDisclosurePage() {
                     fontFamily:    'var(--font-mono)',
                     fontSize:      '0.85rem',
                     fontWeight:    500,
-                    color:         '#E8E6E1',
+                    color:         'var(--c-text)',
                     marginTop:     0,
                     marginBottom:  '0.5rem',
                     letterSpacing: '-0.01em',
@@ -100,7 +100,7 @@ export default function AiDisclosurePage() {
                   <p style={{
                     fontFamily: 'var(--font-sans)',
                     fontSize:   '0.85rem',
-                    color:      '#888888',
+                    color:      'var(--c-muted)',
                     lineHeight: 1.7,
                     margin:     0,
                   }}>
@@ -112,7 +112,7 @@ export default function AiDisclosurePage() {
           </section>
 
           {/* Divider */}
-          <div style={{ borderTop: '1px solid #1A1A1A', marginBottom: '3.5rem' }} />
+          <div style={{ borderTop: '1px solid var(--c-border)', marginBottom: '3.5rem' }} />
 
           {/* Where I don't */}
           <section style={{ marginBottom: '3.5rem' }}>
@@ -122,7 +122,7 @@ export default function AiDisclosurePage() {
               fontWeight:    500,
               letterSpacing: '0.1em',
               textTransform: 'uppercase',
-              color:         '#FF6B6B',
+              color:         'var(--c-accent-alt)',
               marginBottom:  '1.75rem',
               marginTop:     0,
             }}>
@@ -136,7 +136,7 @@ export default function AiDisclosurePage() {
                     fontFamily:    'var(--font-mono)',
                     fontSize:      '0.85rem',
                     fontWeight:    500,
-                    color:         '#E8E6E1',
+                    color:         'var(--c-text)',
                     marginTop:     0,
                     marginBottom:  '0.5rem',
                     letterSpacing: '-0.01em',
@@ -146,7 +146,7 @@ export default function AiDisclosurePage() {
                   <p style={{
                     fontFamily: 'var(--font-sans)',
                     fontSize:   '0.85rem',
-                    color:      '#888888',
+                    color:      'var(--c-muted)',
                     lineHeight: 1.7,
                     margin:     0,
                   }}>
@@ -158,13 +158,13 @@ export default function AiDisclosurePage() {
           </section>
 
           {/* Divider */}
-          <div style={{ borderTop: '1px solid #1A1A1A', marginBottom: '3rem' }} />
+          <div style={{ borderTop: '1px solid var(--c-border)', marginBottom: '3rem' }} />
 
           {/* Closing */}
           <p style={{
             fontFamily: 'var(--font-sans)',
             fontSize:   '0.85rem',
-            color:      '#666666',
+            color:      'var(--c-muted)',
             lineHeight: 1.75,
             margin:     0,
           }}>
