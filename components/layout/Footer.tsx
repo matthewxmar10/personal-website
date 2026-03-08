@@ -41,9 +41,10 @@ export default function Footer() {
           }}
         >
           {[
-            { label: 'Home', href: '/' },
-            { label: 'Guestbook', href: '/guestbook' },
-            { label: 'Contact', href: '/contact' },
+            { label: 'Home',           href: '/'         },
+            { label: 'Guestbook',      href: '/guestbook'},
+            { label: 'Contact',        href: '/contact'  },
+            { label: 'AI Disclosure',  href: '/ai'       },
           ].map((link) => (
             <li key={link.href}>
               <a
