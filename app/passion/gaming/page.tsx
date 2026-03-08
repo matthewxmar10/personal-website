@@ -36,7 +36,7 @@ export default function GamingPage() {
         />
 
         <ScrollReveal>
-          <h2 style={{ fontFamily: 'var(--font-mono)', fontSize: '0.8rem', fontWeight: 500, letterSpacing: '0.1em', textTransform: 'uppercase', color: '#444444', marginBottom: '1.25rem' }}>
+          <h2 style={{ fontFamily: 'var(--font-mono)', fontSize: '0.8rem', fontWeight: 500, letterSpacing: '0.1em', textTransform: 'uppercase', color: 'var(--c-muted)', marginBottom: '1.25rem' }}>
             Profiles
           </h2>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(240px, 1fr))', gap: '1rem' }}>
@@ -53,13 +53,13 @@ export default function GamingPage() {
                   style={{ padding: '1.5rem', display: 'flex', flexDirection: 'column', gap: '0.5rem' }}
                 >
                   <div style={{ fontSize: '1.4rem' }}>{profile.icon}</div>
-                  <div style={{ fontFamily: 'var(--font-mono)', fontSize: '0.85rem', fontWeight: 500, color: '#E8E6E1' }}>
+                  <div style={{ fontFamily: 'var(--font-mono)', fontSize: '0.85rem', fontWeight: 500, color: 'var(--c-text)' }}>
                     {profile.platform}
                   </div>
-                  <div style={{ fontFamily: 'var(--font-sans)', fontSize: '0.8rem', color: '#666666' }}>
+                  <div style={{ fontFamily: 'var(--font-sans)', fontSize: '0.8rem', color: 'var(--c-muted)' }}>
                     {profile.description}
                   </div>
-                  <div style={{ fontFamily: 'var(--font-mono)', fontSize: '0.6rem', color: '#00E5FF', letterSpacing: '0.06em', marginTop: '0.25rem' }}>
+                  <div style={{ fontFamily: 'var(--font-mono)', fontSize: '0.6rem', color: 'var(--c-accent)', letterSpacing: '0.06em', marginTop: '0.25rem' }}>
                     View profile ↗
                   </div>
                 </div>

@@ -25,10 +25,10 @@ export default async function LearningArchivePage() {
 
         <ScrollReveal>
           {entries.length === 0 ? (
-            <div style={{ padding: '2rem', background: '#111111', border: '1px solid #1E1E1E', borderRadius: '2px' }}>
-              <p style={{ fontFamily: 'var(--font-mono)', fontSize: '0.7rem', color: '#333333', margin: 0, letterSpacing: '0.06em' }}>
+            <div style={{ padding: '2rem', background: 'var(--c-surface)', border: '1px solid var(--c-border)', borderRadius: '2px' }}>
+              <p style={{ fontFamily: 'var(--font-mono)', fontSize: '0.7rem', color: 'var(--c-muted)', margin: 0, letterSpacing: '0.06em' }}>
                 No completed topics yet — move a file into{' '}
-                <code style={{ color: '#00E5FF', fontSize: '0.65rem' }}>content/learning/archive/</code>{' '}
+                <code style={{ color: 'var(--c-accent)', fontSize: '0.65rem' }}>content/learning/archive/</code>{' '}
                 to archive it.
               </p>
             </div>
@@ -40,7 +40,7 @@ export default async function LearningArchivePage() {
                   style={{
                     paddingBottom: '2.5rem',
                     marginBottom:  '2.5rem',
-                    borderBottom:  i < entries.length - 1 ? '1px solid #1A1A1A' : 'none',
+                    borderBottom:  i < entries.length - 1 ? '1px solid var(--c-border)' : 'none',
                   }}
                 >
                   {/* Header row: title + date */}
@@ -49,7 +49,7 @@ export default async function LearningArchivePage() {
                       fontFamily:    'var(--font-mono)',
                       fontSize:      '1rem',
                       fontWeight:    500,
-                      color:         '#E8E6E1',
+                      color:         'var(--c-text)',
                       margin:        0,
                       letterSpacing: '-0.01em',
                     }}>
@@ -60,7 +60,7 @@ export default async function LearningArchivePage() {
                         fontFamily:    'var(--font-mono)',
                         fontSize:      '0.6rem',
                         letterSpacing: '0.08em',
-                        color:         '#444444',
+                        color:         'var(--c-muted)',
                         flexShrink:    0,
                       }}>
                         {entry.date}
@@ -79,7 +79,7 @@ export default async function LearningArchivePage() {
                   {entry.links.length > 0 && (
                     <div style={{
                       paddingTop: '0.85rem',
-                      borderTop:  '1px solid #1A1A1A',
+                      borderTop:  '1px solid var(--c-border)',
                       display:    'flex',
                       flexWrap:   'wrap',
                       alignItems: 'center',
@@ -90,7 +90,7 @@ export default async function LearningArchivePage() {
                         <Fragment key={li}>
                           {li > 0 && (
                             <span style={{
-                              color:      '#2A2A2A',
+                              color:      'var(--c-muted)',
                               userSelect: 'none',
                               fontFamily: 'var(--font-mono)',
                               fontSize:   '0.7rem',
@@ -128,11 +128,11 @@ export default async function LearningArchivePage() {
             font-family:     var(--font-mono);
             font-size:       0.68rem;
             letter-spacing:  0.03em;
-            color:           rgba(0,229,255,0.65);
+            color:           rgba(var(--c-accent-rgb), 0.65);
             text-decoration: none;
             transition:      color 0.15s;
           }
-          .learning-link:hover { color: rgba(0,229,255,1); }
+          .learning-link:hover { color: var(--c-accent); }
         `}</style>
       </div>
     </PageTransition>

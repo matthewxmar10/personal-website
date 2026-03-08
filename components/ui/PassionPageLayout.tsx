@@ -90,7 +90,7 @@ export default function PassionPageLayout({
               fontWeight: 500,
               letterSpacing: '0.08em',
               textTransform: 'uppercase',
-              color: '#444444',
+              color: 'var(--c-muted)',
               marginBottom: '1rem',
               marginTop: 0,
             }}>
@@ -104,7 +104,7 @@ export default function PassionPageLayout({
               width: '100%',
               aspectRatio: '16/9',
               marginBottom: '3rem',
-              border: '1px solid #1E1E1E',
+              border: '1px solid var(--c-border)',
               borderRadius: '2px',
               overflow: 'hidden',
             }}>
@@ -121,8 +121,8 @@ export default function PassionPageLayout({
             <div style={{
               width: '100%',
               aspectRatio: '16/9',
-              background: '#111111',
-              border: '1px solid #1E1E1E',
+              background: 'var(--c-surface)',
+              border: '1px solid var(--c-border)',
               borderRadius: '2px',
               display: 'flex',
               flexDirection: 'column',
@@ -132,10 +132,10 @@ export default function PassionPageLayout({
               marginBottom: '3rem',
             }}>
               <div style={{ fontSize: '2rem', opacity: 0.3 }}>▶</div>
-              <div style={{ fontFamily: 'var(--font-mono)', fontSize: '0.65rem', letterSpacing: '0.12em', textTransform: 'uppercase', color: '#333333' }}>
+              <div style={{ fontFamily: 'var(--font-mono)', fontSize: '0.65rem', letterSpacing: '0.12em', textTransform: 'uppercase', color: 'var(--c-muted)' }}>
                 {reelLabel} — Coming Soon
               </div>
-              <p style={{ fontFamily: 'var(--font-sans)', fontSize: '0.8rem', color: '#2A2A2A', textAlign: 'center', maxWidth: '300px' }}>
+              <p style={{ fontFamily: 'var(--font-sans)', fontSize: '0.8rem', color: 'var(--c-text-sub)', textAlign: 'center', maxWidth: '300px' }}>
                 Replace this with a YouTube/Vimeo embed URL
               </p>
             </div>
@@ -154,7 +154,7 @@ export default function PassionPageLayout({
         {/* Credits list */}
         {credits.length > 0 && (
           <ScrollReveal delay={0.1}>
-            <h2 style={{ fontFamily: 'var(--font-mono)', fontSize: '0.85rem', fontWeight: 500, letterSpacing: '0.08em', textTransform: 'uppercase', color: '#444444', marginBottom: '1.25rem' }}>
+            <h2 style={{ fontFamily: 'var(--font-mono)', fontSize: '0.85rem', fontWeight: 500, letterSpacing: '0.08em', textTransform: 'uppercase', color: 'var(--c-muted)', marginBottom: '1.25rem' }}>
               {creditsSectionTitle}
             </h2>
             <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
@@ -167,33 +167,33 @@ export default function PassionPageLayout({
                     alignItems: 'center',
                     gap: '1rem',
                     padding: '0.85rem 1.25rem',
-                    background: '#111111',
-                    border: '1px solid #1E1E1E',
+                    background: 'var(--c-surface)',
+                    border: '1px solid var(--c-border)',
                     borderRadius: '2px',
                     transition: 'border-color 0.2s ease',
                   }}
-                  onMouseEnter={(e) => ((e.currentTarget as HTMLElement).style.borderColor = 'rgba(0,229,255,0.2)')}
-                  onMouseLeave={(e) => ((e.currentTarget as HTMLElement).style.borderColor = '#1E1E1E')}
+                  onMouseEnter={(e) => ((e.currentTarget as HTMLElement).style.borderColor = 'rgba(var(--c-accent-rgb), 0.2)')}
+                  onMouseLeave={(e) => ((e.currentTarget as HTMLElement).style.borderColor = 'var(--c-border)')}
                 >
                   <div style={{ display: 'flex', alignItems: 'center', gap: '0.65rem' }}>
                     <PlatformIcon role={credit.role} />
                     <div>
-                      <div style={{ fontFamily: 'var(--font-sans)', fontSize: '0.9rem', color: '#E8E6E1', marginBottom: '2px' }}>
+                      <div style={{ fontFamily: 'var(--font-sans)', fontSize: '0.9rem', color: 'var(--c-text)', marginBottom: '2px' }}>
                         {credit.link ? (
-                          <a href={credit.link} target="_blank" rel="noopener noreferrer" style={{ color: '#00E5FF', textDecoration: 'none' }}>
+                          <a href={credit.link} target="_blank" rel="noopener noreferrer" style={{ color: 'var(--c-accent)', textDecoration: 'none' }}>
                             {credit.title} ↗
                           </a>
                         ) : credit.title}
                       </div>
                       {credit.role && (
-                        <div style={{ fontFamily: 'var(--font-mono)', fontSize: '0.65rem', color: '#555555', letterSpacing: '0.06em' }}>
+                        <div style={{ fontFamily: 'var(--font-mono)', fontSize: '0.65rem', color: 'var(--c-muted)', letterSpacing: '0.06em' }}>
                           {credit.role}
                         </div>
                       )}
                     </div>
                   </div>
                   {credit.year && (
-                    <div style={{ fontFamily: 'var(--font-mono)', fontSize: '0.65rem', color: '#444444', letterSpacing: '0.06em', whiteSpace: 'nowrap' }}>
+                    <div style={{ fontFamily: 'var(--font-mono)', fontSize: '0.65rem', color: 'var(--c-muted)', letterSpacing: '0.06em', whiteSpace: 'nowrap' }}>
                       {credit.year}
                     </div>
                   )}
@@ -206,11 +206,11 @@ export default function PassionPageLayout({
         {/* Placeholder credits */}
         {credits.length === 0 && (
           <ScrollReveal delay={0.1}>
-            <h2 style={{ fontFamily: 'var(--font-mono)', fontSize: '0.85rem', fontWeight: 500, letterSpacing: '0.08em', textTransform: 'uppercase', color: '#444444', marginBottom: '1.25rem' }}>
+            <h2 style={{ fontFamily: 'var(--font-mono)', fontSize: '0.85rem', fontWeight: 500, letterSpacing: '0.08em', textTransform: 'uppercase', color: 'var(--c-muted)', marginBottom: '1.25rem' }}>
               {creditsSectionTitle}
             </h2>
-            <div style={{ padding: '1.5rem', background: '#111111', border: '1px solid #1E1E1E', borderRadius: '2px' }}>
-              <p style={{ fontFamily: 'var(--font-mono)', fontSize: '0.7rem', color: '#333333', margin: 0, letterSpacing: '0.06em' }}>
+            <div style={{ padding: '1.5rem', background: 'var(--c-surface)', border: '1px solid var(--c-border)', borderRadius: '2px' }}>
+              <p style={{ fontFamily: 'var(--font-mono)', fontSize: '0.7rem', color: 'var(--c-muted)', margin: 0, letterSpacing: '0.06em' }}>
                 Credits coming soon.
               </p>
             </div>

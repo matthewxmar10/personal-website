@@ -76,7 +76,7 @@ export default function ContactPage() {
                   className="glow-border"
                   style={{
                     padding:               '1.5rem',
-                    background:            '#111111',
+                    background:            'var(--c-surface)',
                     borderRadius:          '2px',
                     display:               'grid',
                     gridTemplateColumns:   'auto 1fr',
@@ -90,14 +90,14 @@ export default function ContactPage() {
                   <div style={{ fontSize: '1.5rem' }}>{method.icon}</div>
                   <div>
                     <div style={{ display: 'flex', alignItems: 'baseline', gap: '0.75rem', marginBottom: '0.3rem', flexWrap: 'wrap' }}>
-                      <span style={{ fontFamily: 'var(--font-mono)', fontSize: '0.75rem', letterSpacing: '0.08em', textTransform: 'uppercase', color: '#444444' }}>
+                      <span style={{ fontFamily: 'var(--font-mono)', fontSize: '0.75rem', letterSpacing: '0.08em', textTransform: 'uppercase', color: 'var(--c-muted)' }}>
                         {method.label}
                       </span>
-                      <span style={{ fontFamily: 'var(--font-mono)', fontSize: '0.85rem', color: '#00E5FF' }}>
+                      <span style={{ fontFamily: 'var(--font-mono)', fontSize: '0.85rem', color: 'var(--c-accent)' }}>
                         {method.value}
                       </span>
                     </div>
-                    <p style={{ fontFamily: 'var(--font-sans)', fontSize: '0.82rem', color: '#666666', margin: 0, lineHeight: 1.5 }}>
+                    <p style={{ fontFamily: 'var(--font-sans)', fontSize: '0.82rem', color: 'var(--c-muted)', margin: 0, lineHeight: 1.5 }}>
                       {method.description}
                     </p>
                   </div>
@@ -109,13 +109,13 @@ export default function ContactPage() {
 
         {/* Contact form */}
         <ScrollReveal delay={0.15}>
-          <h2 style={{ fontFamily: 'var(--font-mono)', fontSize: '0.8rem', letterSpacing: '0.1em', textTransform: 'uppercase', color: '#444444', marginBottom: '1.25rem', fontWeight: 500 }}>
+          <h2 style={{ fontFamily: 'var(--font-mono)', fontSize: '0.8rem', letterSpacing: '0.1em', textTransform: 'uppercase', color: 'var(--c-muted)', marginBottom: '1.25rem', fontWeight: 500 }}>
             Or send a message
           </h2>
 
           {status === 'success' ? (
-            <div style={{ padding: '1.5rem', background: '#111111', border: '1px solid #1E1E1E', borderRadius: '2px' }}>
-              <p style={{ fontFamily: 'var(--font-mono)', fontSize: '0.75rem', color: '#00E5FF', margin: 0, letterSpacing: '0.04em' }}>
+            <div style={{ padding: '1.5rem', background: 'var(--c-surface)', border: '1px solid var(--c-border)', borderRadius: '2px' }}>
+              <p style={{ fontFamily: 'var(--font-mono)', fontSize: '0.75rem', color: 'var(--c-accent)', margin: 0, letterSpacing: '0.04em' }}>
                 ✓ Message sent — I&apos;ll get back to you soon.
               </p>
             </div>

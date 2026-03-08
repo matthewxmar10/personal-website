@@ -336,18 +336,18 @@ function TagStrip({
             transition={{ duration: 0.14 }}
             aria-pressed={active}
             style={{
-              background: active ? 'rgba(0,229,255,0.08)' : 'transparent',
-              border: `1px solid ${active ? 'rgba(0,229,255,0.55)' : 'rgba(255,255,255,0.1)'}`,
+              background: active ? 'rgba(var(--c-accent-rgb), 0.08)' : 'transparent',
+              border: `1px solid ${active ? 'rgba(var(--c-accent-rgb), 0.55)' : 'var(--c-border)'}`,
               borderRadius: '2px',
               padding: '0.3rem 0.75rem',
               fontFamily: 'var(--font-mono)',
               fontSize: '0.65rem',
               letterSpacing: '0.1em',
               textTransform: 'uppercase',
-              color: active ? 'rgba(0,229,255,0.9)' : 'var(--c-muted)',
+              color: active ? 'var(--c-accent)' : 'var(--c-muted)',
               cursor: 'pointer',
               transition: 'color 0.15s, border-color 0.15s, background 0.15s',
-              boxShadow: active ? '0 0 8px rgba(0,229,255,0.12)' : 'none',
+              boxShadow: active ? '0 0 8px rgba(var(--c-accent-rgb), 0.12)' : 'none',
             }}
           >
             {tag}
