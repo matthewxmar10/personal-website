@@ -4,6 +4,7 @@ export interface Photo {
   src:         string;   // '/photos/album/filename.jpg'
   description: string;   // caption shown in the lightbox when photo is clicked
   alt:         string;   // screen-reader description of what's in the photo
+  tags?:       string[]; // optional — any of: 'Kris' | 'Travel' | 'Music' | 'Friends' | 'Groups'
 }
 
 // ── HOW TO ADD A PHOTO ────────────────────────────────────────────────────────
@@ -19,10 +20,13 @@ export interface Photo {
 //         src:         '/photos/album/your-filename.jpg',
 //         description: 'Short caption shown when this photo is clicked.',
 //         alt:         'Describe what is in the photo for screen readers.',
+//         tags:        ['Friends', 'Travel'],   // optional — omit if none apply
 //       },
 //
 //  3. Save → commit → push.  The album updates automatically.
 //     Photos are displayed newest-first.
+//
+//  Available tags: 'Kris' | 'Travel' | 'Music' | 'Friends' | 'Groups'
 //
 // ─────────────────────────────────────────────────────────────────────────────
 

@@ -6,6 +6,10 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { photos } from '@/data/photos';
 import type { Photo } from '@/data/photos';
 
+// ── Available tags ─────────────────────────────────────────────────────────────
+
+const ALBUM_TAGS = ['Kris', 'Travel', 'Music', 'Friends', 'Groups'] as const;
+
 // ── Helpers ───────────────────────────────────────────────────────────────────
 
 function fmtDate(dateStr: string): string {
@@ -145,7 +149,21 @@ function AlbumPage({
 
 // ── Book cover (closed state) ─────────────────────────────────────────────────
 
-function BookCover({ count, onOpen }: { count: number; onOpen: () => void }) {
+function BookCover({
+  count,
+  total,
+  onOpen,
+}: {
+  count: number;   // filtered count (shown on cover)
+  total: number;   // total photo count (for "no photos yet" check)
+  onOpen: () => void;
+}) {
+  const countLabel = total === 0
+    ? 'no photos yet'
+    : count === total
+      ? `${count} ${count === 1 ? 'photo' : 'photos'}`
+      : `${count} of ${total} photos`;
+
   return (
     <motion.button
       onClick={onOpen}
@@ -159,7 +177,6 @@ function BookCover({ count, onOpen }: { count: number; onOpen: () => void }) {
         cursor: 'pointer',
         display: 'flex',
         alignItems: 'stretch',
-        // Perspective shadow to simulate book thickness
         filter: 'drop-shadow(8px 8px 32px rgba(0,0,0,0.8))',
       }}
     >
@@ -176,7 +193,6 @@ function BookCover({ count, onOpen }: { count: number; onOpen: () => void }) {
         paddingTop: '1rem',
         paddingBottom: '1rem',
       }}>
-        {/* Binding dots */}
         {Array.from({ length: 8 }).map((_, i) => (
           <div key={i} style={{
             width: '3px', height: '3px', borderRadius: '50%',
@@ -262,8 +278,9 @@ function BookCover({ count, onOpen }: { count: number; onOpen: () => void }) {
           fontSize: '0.58rem',
           letterSpacing: '0.1em',
           color: 'var(--c-muted)',
+          transition: 'color 0.2s',
         }}>
-          {count === 0 ? 'no photos yet' : `${count} ${count === 1 ? 'photo' : 'photos'}`}
+          {countLabel}
         </div>
 
         {/* Animated hint */}
@@ -289,6 +306,91 @@ function BookCover({ count, onOpen }: { count: number; onOpen: () => void }) {
         background: 'linear-gradient(to left, #1a1a1a, #0a0a0a)',
       }} />
     </motion.button>
+  );
+}
+
+// ── Tag filter strip ──────────────────────────────────────────────────────────
+
+function TagStrip({
+  activeTags,
+  onToggle,
+}: {
+  activeTags: string[];
+  onToggle: (tag: string) => void;
+}) {
+  return (
+    <div style={{
+      display: 'flex',
+      flexWrap: 'wrap',
+      gap: '0.5rem',
+      justifyContent: 'center',
+      marginTop: '1.5rem',
+    }}>
+      {ALBUM_TAGS.map(tag => {
+        const active = activeTags.includes(tag);
+        return (
+          <motion.button
+            key={tag}
+            onClick={() => onToggle(tag)}
+            whileHover={{ y: -1 }}
+            transition={{ duration: 0.14 }}
+            aria-pressed={active}
+            style={{
+              background: active ? 'rgba(0,229,255,0.08)' : 'transparent',
+              border: `1px solid ${active ? 'rgba(0,229,255,0.55)' : 'rgba(255,255,255,0.1)'}`,
+              borderRadius: '2px',
+              padding: '0.3rem 0.75rem',
+              fontFamily: 'var(--font-mono)',
+              fontSize: '0.65rem',
+              letterSpacing: '0.1em',
+              textTransform: 'uppercase',
+              color: active ? 'rgba(0,229,255,0.9)' : 'var(--c-muted)',
+              cursor: 'pointer',
+              transition: 'color 0.15s, border-color 0.15s, background 0.15s',
+              boxShadow: active ? '0 0 8px rgba(0,229,255,0.12)' : 'none',
+            }}
+          >
+            {tag}
+          </motion.button>
+        );
+      })}
+
+      {/* Clear button — only shown when tags are active */}
+      <AnimatePresence>
+        {activeTags.length > 0 && (
+          <motion.button
+            initial={{ opacity: 0, scale: 0.85 }}
+            animate={{ opacity: 1, scale: 1 }}
+            exit={{ opacity: 0, scale: 0.85 }}
+            transition={{ duration: 0.15 }}
+            onClick={() => activeTags.forEach(t => onToggle(t))}
+            style={{
+              background: 'transparent',
+              border: '1px solid rgba(255,107,107,0.3)',
+              borderRadius: '2px',
+              padding: '0.3rem 0.75rem',
+              fontFamily: 'var(--font-mono)',
+              fontSize: '0.65rem',
+              letterSpacing: '0.1em',
+              textTransform: 'uppercase',
+              color: 'rgba(255,107,107,0.6)',
+              cursor: 'pointer',
+              transition: 'color 0.15s, border-color 0.15s',
+            }}
+            onMouseEnter={e => {
+              (e.currentTarget as HTMLElement).style.color = 'rgba(255,107,107,0.9)';
+              (e.currentTarget as HTMLElement).style.borderColor = 'rgba(255,107,107,0.6)';
+            }}
+            onMouseLeave={e => {
+              (e.currentTarget as HTMLElement).style.color = 'rgba(255,107,107,0.6)';
+              (e.currentTarget as HTMLElement).style.borderColor = 'rgba(255,107,107,0.3)';
+            }}
+          >
+            clear ✕
+          </motion.button>
+        )}
+      </AnimatePresence>
+    </div>
   );
 }
 
@@ -370,6 +472,26 @@ function Lightbox({ photo, onClose }: { photo: Photo; onClose: () => void }) {
           }}>
             {fmtDate(photo.date)}
           </time>
+
+          {/* Tags in lightbox */}
+          {photo.tags && photo.tags.length > 0 && (
+            <div style={{ display: 'flex', gap: '0.3rem', flexWrap: 'wrap', justifyContent: 'center', marginTop: '4px' }}>
+              {photo.tags.map(tag => (
+                <span key={tag} style={{
+                  fontFamily: 'var(--font-mono)',
+                  fontSize: '0.55rem',
+                  letterSpacing: '0.1em',
+                  textTransform: 'uppercase',
+                  color: '#888',
+                  border: '1px solid #ccc',
+                  borderRadius: '2px',
+                  padding: '1px 6px',
+                }}>
+                  {tag}
+                </span>
+              ))}
+            </div>
+          )}
         </div>
       </motion.div>
 
@@ -390,19 +512,32 @@ function Lightbox({ photo, onClose }: { photo: Photo; onClose: () => void }) {
 // ── Main component ────────────────────────────────────────────────────────────
 
 export default function PhotoAlbum() {
-  const [isOpen,   setIsOpen]   = useState(false);
-  const [spread,   setSpread]   = useState(0);
-  const [dir,      setDir]      = useState<1 | -1>(1);
-  const [lightbox, setLightbox] = useState<Photo | null>(null);
+  const [isOpen,     setIsOpen]     = useState(false);
+  const [spread,     setSpread]     = useState(0);
+  const [dir,        setDir]        = useState<1 | -1>(1);
+  const [lightbox,   setLightbox]   = useState<Photo | null>(null);
+  const [activeTags, setActiveTags] = useState<string[]>([]);
 
-  const totalSpreads = Math.ceil(photos.length / 4);
+  // Filter photos by active tags (OR logic — match any selected tag)
+  const filteredPhotos = activeTags.length === 0
+    ? photos
+    : photos.filter(p => p.tags?.some(t => activeTags.includes(t)));
+
+  const totalSpreads = Math.ceil(filteredPhotos.length / 4);
+
+  const toggleTag = useCallback((tag: string) => {
+    setActiveTags(prev =>
+      prev.includes(tag) ? prev.filter(t => t !== tag) : [...prev, tag]
+    );
+    setSpread(0); // always reset to first page when filter changes
+  }, []);
 
   const goNext = useCallback(() => {
     if (spread < totalSpreads - 1) { setDir(1);  setSpread(s => s + 1); }
   }, [spread, totalSpreads]);
 
   const goPrev = useCallback(() => {
-    if (spread > 0)               { setDir(-1); setSpread(s => s - 1); }
+    if (spread > 0)                { setDir(-1); setSpread(s => s - 1); }
   }, [spread]);
 
   const closeAlbum = useCallback(() => {
@@ -422,25 +557,30 @@ export default function PhotoAlbum() {
     return () => window.removeEventListener('keydown', fn);
   }, [isOpen, lightbox, goNext, goPrev, closeAlbum]);
 
-  // Lock body scroll
+  // Lock body scroll when album is open
   useEffect(() => {
     document.body.style.overflow = isOpen ? 'hidden' : '';
     return () => { document.body.style.overflow = ''; };
   }, [isOpen]);
 
-  // Current 4 photos for this spread
-  const start       = spread * 4;
-  const spreadPhotos = photos.slice(start, start + 4);
-  const leftPhotos  = spreadPhotos.slice(0, 2);
-  const rightPhotos = spreadPhotos.slice(2, 4);
-  const hasPrev     = spread > 0;
-  const hasNext     = spread < totalSpreads - 1;
+  // Current 4 photos for this spread (from filtered set)
+  const start        = spread * 4;
+  const spreadPhotos = filteredPhotos.slice(start, start + 4);
+  const leftPhotos   = spreadPhotos.slice(0, 2);
+  const rightPhotos  = spreadPhotos.slice(2, 4);
+  const hasPrev      = spread > 0;
+  const hasNext      = spread < totalSpreads - 1;
 
   return (
     <>
-      {/* ── Closed cover ── */}
-      <div style={{ display: 'flex', justifyContent: 'center', padding: '2rem 0' }}>
-        <BookCover count={photos.length} onOpen={() => setIsOpen(true)} />
+      {/* ── Cover + tag strip ── */}
+      <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', padding: '2rem 0' }}>
+        <BookCover
+          count={filteredPhotos.length}
+          total={photos.length}
+          onOpen={() => setIsOpen(true)}
+        />
+        <TagStrip activeTags={activeTags} onToggle={toggleTag} />
       </div>
 
       {/* ── Open modal ── */}
@@ -478,7 +618,7 @@ export default function PhotoAlbum() {
                 position: 'relative',
               }}
             >
-              {/* Close button */}
+              {/* Top bar — hints + close button */}
               <div style={{
                 position: 'absolute',
                 top: '-2.4rem', right: 0,
@@ -516,54 +656,75 @@ export default function PhotoAlbum() {
 
               {/* Two pages + spine */}
               <div style={{ flex: 1, display: 'flex', overflow: 'hidden', minHeight: 0 }}>
-                <AnimatePresence mode="wait" custom={dir}>
-                  <motion.div
-                    key={spread}
-                    custom={dir}
-                    variants={{
-                      enter: (d: number) => ({ x: `${d * 6}%`, opacity: 0 }),
-                      center: { x: 0, opacity: 1 },
-                      exit:  (d: number) => ({ x: `${d * -6}%`, opacity: 0 }),
-                    }}
-                    initial="enter"
-                    animate="center"
-                    exit="exit"
-                    transition={{ duration: 0.28, ease: 'easeInOut' }}
-                    style={{ display: 'flex', flex: 1, minWidth: 0 }}
-                  >
-                    {/* Left page */}
-                    {leftPhotos.length > 0 ? (
-                      <AlbumPage
-                        pagePhotos={leftPhotos}
-                        slotOffset={0}
-                        spreadIndex={spread}
-                        onPhotoClick={setLightbox}
-                      />
-                    ) : (
-                      <div style={{ flex: 1, background: '#EDE5D0' }} />
-                    )}
-
-                    {/* Center binding */}
+                {filteredPhotos.length === 0 ? (
+                  // Empty state when filter has no results
+                  <div style={{
+                    flex: 1,
+                    background: '#EDE5D0',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                  }}>
                     <div style={{
-                      width: '14px',
-                      background: 'linear-gradient(to right, #bfb49e, #ccc3ae, #bfb49e)',
-                      boxShadow: 'inset -2px 0 4px rgba(0,0,0,0.18), inset 2px 0 4px rgba(0,0,0,0.18)',
-                      flexShrink: 0,
-                    }} />
+                      fontFamily: 'var(--font-mono)',
+                      fontSize: '0.75rem',
+                      color: '#999',
+                      letterSpacing: '0.08em',
+                      textAlign: 'center',
+                    }}>
+                      No photos match the selected tags.
+                    </div>
+                  </div>
+                ) : (
+                  <AnimatePresence mode="wait" custom={dir}>
+                    <motion.div
+                      key={spread}
+                      custom={dir}
+                      variants={{
+                        enter: (d: number) => ({ x: `${d * 6}%`, opacity: 0 }),
+                        center: { x: 0, opacity: 1 },
+                        exit:  (d: number) => ({ x: `${d * -6}%`, opacity: 0 }),
+                      }}
+                      initial="enter"
+                      animate="center"
+                      exit="exit"
+                      transition={{ duration: 0.28, ease: 'easeInOut' }}
+                      style={{ display: 'flex', flex: 1, minWidth: 0 }}
+                    >
+                      {/* Left page */}
+                      {leftPhotos.length > 0 ? (
+                        <AlbumPage
+                          pagePhotos={leftPhotos}
+                          slotOffset={0}
+                          spreadIndex={spread}
+                          onPhotoClick={setLightbox}
+                        />
+                      ) : (
+                        <div style={{ flex: 1, background: '#EDE5D0' }} />
+                      )}
 
-                    {/* Right page */}
-                    {rightPhotos.length > 0 ? (
-                      <AlbumPage
-                        pagePhotos={rightPhotos}
-                        slotOffset={2}
-                        spreadIndex={spread}
-                        onPhotoClick={setLightbox}
-                      />
-                    ) : (
-                      <div style={{ flex: 1, background: '#EDE5D0' }} />
-                    )}
-                  </motion.div>
-                </AnimatePresence>
+                      {/* Center binding */}
+                      <div style={{
+                        width: '14px',
+                        background: 'linear-gradient(to right, #bfb49e, #ccc3ae, #bfb49e)',
+                        boxShadow: 'inset -2px 0 4px rgba(0,0,0,0.18), inset 2px 0 4px rgba(0,0,0,0.18)',
+                        flexShrink: 0,
+                      }} />
+
+                      {/* Right page */}
+                      {rightPhotos.length > 0 ? (
+                        <AlbumPage
+                          pagePhotos={rightPhotos}
+                          slotOffset={2}
+                          spreadIndex={spread}
+                          onPhotoClick={setLightbox}
+                        />
+                      ) : (
+                        <div style={{ flex: 1, background: '#EDE5D0' }} />
+                      )}
+                    </motion.div>
+                  </AnimatePresence>
+                )}
               </div>
 
               {/* Page counter + navigation */}
@@ -603,9 +764,9 @@ export default function PhotoAlbum() {
                   letterSpacing: '0.1em',
                   color: '#888',
                 }}>
-                  {photos.length === 0
-                    ? 'no photos yet'
-                    : `${start + 1}–${Math.min(start + 4, photos.length)} of ${photos.length}`}
+                  {filteredPhotos.length === 0
+                    ? 'no photos match'
+                    : `${start + 1}–${Math.min(start + 4, filteredPhotos.length)} of ${filteredPhotos.length}`}
                 </span>
 
                 {/* Next */}
