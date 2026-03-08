@@ -7,7 +7,7 @@ export const metadata = { title: 'AI Disclosure — Matthew' };
 const USES_AI: { heading: string; body: string }[] = [
   {
     heading: 'Software development',
-    body:    'I use AI as a coding assistant — for scaffolding, debugging, and working through technical problems faster. This site was built with Claude Code. That said, I still understand what the code does; I use AI to move faster, not to replace the thinking.',
+    body:    'I use AI as a coding tool and assistant. This site, as well as others I work on, are built with Claude Code. That said, I still provide entire design prompts and refine until my vision is perfectly in place — I do not use AI for the creative process, only the implementation. This also helps me ensure that the sites I build are built with security and accessibility top of mind — things I would definitely miss if attempting to build on my own.',
   },
   {
     heading: 'Research and learning',
@@ -15,14 +15,14 @@ const USES_AI: { heading: string; body: string }[] = [
   },
   {
     heading: 'Drafting and organizing thoughts',
-    body:    'Sometimes I use AI to help structure ideas — turning rough notes into something coherent, or pressure-testing how I\'ve framed something. I write my own words; I just use it to sharpen them.',
+    body:    'Sometimes I use AI to help structure my notes, ideas, and piece thoughts into coherent sentences (like this one!). Most times, it\'s my words being refined. Sometimes, it\'s AI\'s words that I\'m reviewing and making sure are authentic to me, what I would say, and how I would say it. Either way — it\'s not being put out by me without my explicit review and stamp of approval.',
   },
 ];
 
 const NO_AI: { heading: string; body: string }[] = [
   {
     heading: 'Acting and performance',
-    body:    'My craft is off the table. No AI coaching, no AI-generated scripts, no AI anything when it comes to performance. Acting is a deeply human discipline and I intend to keep it that way.',
+    body:    'No AI-generated scripts, no AI anything when it comes to performance. Acting is a deeply human discipline and I intend to keep it that way.',
   },
   {
     heading: 'Music',
