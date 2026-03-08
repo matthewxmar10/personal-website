@@ -1,46 +1,35 @@
-import { Fragment }    from 'react';
-import Link            from 'next/link';
-import PageHeader      from '@/components/ui/PageHeader';
-import PageTransition  from '@/components/ui/PageTransition';
-import ScrollReveal    from '@/components/ui/ScrollReveal';
-import { getLearningEntries } from '@/lib/learning';
+import { Fragment }   from 'react';
+import Link           from 'next/link';
+import PageHeader     from '@/components/ui/PageHeader';
+import PageTransition from '@/components/ui/PageTransition';
+import ScrollReveal   from '@/components/ui/ScrollReveal';
+import { getArchivedEntries } from '@/lib/learning';
 
-export const metadata = { title: 'Learning — Matthew' };
+export const metadata = { title: 'Learning Archive — Matthew' };
 
-export default async function LearningPage() {
-  const entries = await getLearningEntries();
+export default async function LearningArchivePage() {
+  const entries = await getArchivedEntries();
 
   return (
     <PageTransition>
       <div className="container" style={{ paddingBottom: '4rem' }}>
         <PageHeader
-          title="Learning"
-          subtitle="What I'm currently learning."
+          title="Learning Archive"
+          subtitle="Topics I've previously studied, newest to oldest."
           breadcrumbs={[
-            { label: 'Passion',  href: '/passion/acting'   },
-            { label: 'Learning', href: '/passion/learning' },
+            { label: 'Passion',   href: '/passion/acting'          },
+            { label: 'Learning',  href: '/passion/learning'        },
+            { label: 'Archive',   href: '/passion/learning/archive'},
           ]}
         />
 
-        {/* Section heading */}
         <ScrollReveal>
-          <h2 style={{
-            fontFamily:    'var(--font-mono)',
-            fontSize:      '0.8rem',
-            fontWeight:    500,
-            letterSpacing: '0.1em',
-            textTransform: 'uppercase',
-            color:         '#444444',
-            marginBottom:  '2rem',
-            marginTop:     0,
-          }}>
-            Currently Learning
-          </h2>
-
           {entries.length === 0 ? (
-            <div style={{ padding: '2rem', background: '#111111', border: '1px solid #1E1E1E', borderRadius: '2px', marginBottom: '2rem' }}>
+            <div style={{ padding: '2rem', background: '#111111', border: '1px solid #1E1E1E', borderRadius: '2px' }}>
               <p style={{ fontFamily: 'var(--font-mono)', fontSize: '0.7rem', color: '#333333', margin: 0, letterSpacing: '0.06em' }}>
-                Nothing in the queue right now.
+                No completed topics yet — move a file into{' '}
+                <code style={{ color: '#00E5FF', fontSize: '0.65rem' }}>content/learning/archive/</code>{' '}
+                to archive it.
               </p>
             </div>
           ) : (
@@ -54,18 +43,30 @@ export default async function LearningPage() {
                     borderBottom:  i < entries.length - 1 ? '1px solid #1A1A1A' : 'none',
                   }}
                 >
-                  {/* Topic title */}
-                  <h3 style={{
-                    fontFamily:    'var(--font-mono)',
-                    fontSize:      '1rem',
-                    fontWeight:    500,
-                    color:         '#E8E6E1',
-                    marginTop:     0,
-                    marginBottom:  '0.85rem',
-                    letterSpacing: '-0.01em',
-                  }}>
-                    {entry.title}
-                  </h3>
+                  {/* Header row: title + date */}
+                  <div style={{ display: 'flex', alignItems: 'baseline', justifyContent: 'space-between', gap: '1rem', marginBottom: '0.85rem', flexWrap: 'wrap' }}>
+                    <h3 style={{
+                      fontFamily:    'var(--font-mono)',
+                      fontSize:      '1rem',
+                      fontWeight:    500,
+                      color:         '#E8E6E1',
+                      margin:        0,
+                      letterSpacing: '-0.01em',
+                    }}>
+                      {entry.title}
+                    </h3>
+                    {entry.date && (
+                      <span style={{
+                        fontFamily:    'var(--font-mono)',
+                        fontSize:      '0.6rem',
+                        letterSpacing: '0.08em',
+                        color:         '#444444',
+                        flexShrink:    0,
+                      }}>
+                        {entry.date}
+                      </span>
+                    )}
+                  </div>
 
                   {/* Description */}
                   <div
@@ -114,23 +115,22 @@ export default async function LearningPage() {
             </div>
           )}
 
-          {/* Archive link */}
+          {/* Back link */}
           <div style={{ marginTop: '0.5rem' }}>
-            <Link href="/passion/learning/archive" className="btn">
-              Archive →
+            <Link href="/passion/learning" className="btn">
+              ← Back to Learning
             </Link>
           </div>
         </ScrollReveal>
 
-        {/* Scoped styles */}
         <style>{`
           .learning-link {
-            font-family:    var(--font-mono);
-            font-size:      0.68rem;
-            letter-spacing: 0.03em;
-            color:          rgba(0,229,255,0.65);
+            font-family:     var(--font-mono);
+            font-size:       0.68rem;
+            letter-spacing:  0.03em;
+            color:           rgba(0,229,255,0.65);
             text-decoration: none;
-            transition:     color 0.15s;
+            transition:      color 0.15s;
           }
           .learning-link:hover { color: rgba(0,229,255,1); }
         `}</style>
