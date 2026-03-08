@@ -1,47 +1,37 @@
 export interface Photo {
-  id: string;
-  date: string; // YYYY-MM-DD
-  src: string;
-  description: string;
-  alt: string;
+  id:          string;   // unique slug — e.g. 'concert-2026-03-08'  (no spaces)
+  date:        string;   // YYYY-MM-DD
+  src:         string;   // '/photos/album/filename.jpg'
+  description: string;   // caption shown in the lightbox when photo is clicked
+  alt:         string;   // screen-reader description of what's in the photo
 }
 
-// Add new photos here — sorted newest-to-oldest automatically
-// To add a photo:
-// 1. Drop the image in /public/photos/
-// 2. Add an entry to this array (will auto-sort by date)
+// ── HOW TO ADD A PHOTO ────────────────────────────────────────────────────────
+//
+//  1. Drop your image into:  public/photos/album/
+//     (JPEG preferred — if you have HEIC or PNG, Claude can convert them)
+//
+//  2. Add an entry to the array below:
+//
+//       {
+//         id:          'short-name-YYYY-MM-DD',
+//         date:        'YYYY-MM-DD',
+//         src:         '/photos/album/your-filename.jpg',
+//         description: 'Short caption shown when this photo is clicked.',
+//         alt:         'Describe what is in the photo for screen readers.',
+//       },
+//
+//  3. Save → commit → push.  The album updates automatically.
+//     Photos are displayed newest-first.
+//
+// ─────────────────────────────────────────────────────────────────────────────
+
 const rawPhotos: Photo[] = [
-  {
-    id: 'placeholder-1',
-    date: '2024-12-25',
-    src: '/photos/placeholder.jpg',
-    description: 'A winter moment — placeholder photo.',
-    alt: 'Placeholder photo 1',
-  },
-  {
-    id: 'placeholder-2',
-    date: '2024-10-31',
-    src: '/photos/placeholder.jpg',
-    description: 'October vibes — placeholder photo.',
-    alt: 'Placeholder photo 2',
-  },
-  {
-    id: 'placeholder-3',
-    date: '2024-07-04',
-    src: '/photos/placeholder.jpg',
-    description: 'Summer day — placeholder photo.',
-    alt: 'Placeholder photo 3',
-  },
-  {
-    id: 'placeholder-4',
-    date: '2024-03-15',
-    src: '/photos/placeholder.jpg',
-    description: 'Spring light — placeholder photo.',
-    alt: 'Placeholder photo 4',
-  },
+  // ↓ Add your photos here
+
 ];
 
-// Auto-sort newest first
+// Auto-sorted newest → oldest
 export const photos: Photo[] = [...rawPhotos].sort(
   (a, b) => new Date(b.date).getTime() - new Date(a.date).getTime()
 );
