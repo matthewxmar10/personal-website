@@ -11,8 +11,8 @@
 // ─────────────────────────────────────────────────────────────────────────────
 
 const CHANNELS: { id: string; handle: string }[] = [
-  { id: 'TODO_CHANNEL_ID_MATTHEW1PG',  handle: '@matthew-1pg'  },
-  { id: 'TODO_CHANNEL_ID_MATTHEWOSRS', handle: '@matthew-OSRS' },
+  { id: 'UC3UBAnW5KgM5tLWjc3O4VLQ', handle: '@matthew-1pg'  },
+  { id: 'UC_NP6tAYKnocyAVw4SagG9A', handle: '@matthew-OSRS' },
 ];
 
 export interface YTVideo {
