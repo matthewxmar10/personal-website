@@ -114,6 +114,71 @@ function EmeraldFlyer() {
   );
 }
 
+// ── "Click me" speech bubble (homepage only) ─────────────────────────────────
+
+function ClickMeBubble({ theme }: { theme: string }) {
+  const bg     = theme === 'light' ? 'rgba(255,255,255,0.94)' : 'rgba(14,14,14,0.92)';
+  const border = theme === 'light' ? 'rgba(0,0,0,0.14)' : 'rgba(255,255,255,0.12)';
+
+  return (
+    <motion.div
+      aria-hidden="true"
+      style={{
+        position: 'absolute',
+        bottom: 'calc(100% + 14px)',
+        left: '50%',
+        // x:'-50%' lets Framer Motion own the centering offset inside its
+        // transform — CSS `transform:'translateX(-50%)'` gets overwritten the
+        // moment Framer Motion applies the y-bob animation, shifting the bubble.
+        x: '-50%',
+        whiteSpace: 'nowrap',
+        background: bg,
+        border: `1px solid ${border}`,
+        borderRadius: '8px',
+        padding: '5px 11px',
+        fontFamily: 'var(--font-mono)',
+        fontSize: '0.58rem',
+        letterSpacing: '0.14em',
+        textTransform: 'uppercase',
+        color: 'var(--c-accent)',
+        pointerEvents: 'none',
+        backdropFilter: 'blur(6px)',
+        boxShadow: '0 2px 10px rgba(0,0,0,0.18)',
+      }}
+      initial={{ opacity: 0, y: 6 }}
+      animate={{ opacity: 1, y: [0, -4, 0] }}
+      transition={{
+        opacity: { duration: 0.4, delay: 0.6 },
+        y: { duration: 2.0, repeat: Infinity, ease: 'easeInOut', delay: 0.6 },
+      }}
+    >
+      click me
+      {/* Triangle pointer — marginLeft centres the 0-width element without
+          using CSS transform (which Framer Motion would overwrite on parent) */}
+      <div style={{
+        position: 'absolute',
+        bottom: '-6px',
+        left: '50%',
+        marginLeft: '-6px',
+        width: 0, height: 0,
+        borderLeft: '6px solid transparent',
+        borderRight: '6px solid transparent',
+        borderTop: `6px solid ${border}`,
+      }} />
+      <div style={{
+        position: 'absolute',
+        bottom: '-4px',
+        left: '50%',
+        marginLeft: '-5px',
+        width: 0, height: 0,
+        borderLeft: '5px solid transparent',
+        borderRight: '5px solid transparent',
+        borderTop: `5px solid ${bg}`,
+      }} />
+    </motion.div>
+  );
+}
+
 // ── Page emerald ──────────────────────────────────────────────────────────────
 
 function PageEmerald() {
@@ -158,6 +223,13 @@ function PageEmerald() {
   const glowLo = `${baseShadow} drop-shadow(0 0 8px  ${effectiveColor}bb)`;
   const glowHi = `${baseShadow} drop-shadow(0 0 14px ${effectiveColor})`;
 
+  // Homepage gets a fixed centred position above the "welcome" heading
+  // so new visitors immediately see a gem they can interact with.
+  const isHomepage = pathname === '/';
+  const positionStyle = isHomepage
+    ? { top: 'calc(50vh - 195px)', left: 'calc(50vw - 24px)' }
+    : assignment.position;
+
   return (
     <AnimatePresence>
       {visible && (
@@ -169,11 +241,16 @@ function PageEmerald() {
           title="A hidden gem…"
           style={{
             position: 'fixed',
-            ...assignment.position,
+            ...positionStyle,
             zIndex: 5000,
             background: 'none',
             border: 'none',
             padding: 0,
+            margin: 0,
+            // Explicit size so ClickMeBubble's left:50% centres precisely
+            width: '48px',
+            height: '56px',
+            overflow: 'visible',
             cursor: 'pointer',
           }}
           initial={{ opacity: 0, scale: 0 }}
@@ -200,6 +277,7 @@ function PageEmerald() {
           whileHover={shouldReduce ? undefined : { scale: 1.28 }}
           exit={{ opacity: 0, scale: 1.6, transition: { duration: 0.22 } }}
         >
+          {isHomepage && <ClickMeBubble theme={theme} />}
           <span className="emerald-spin-wrapper" aria-hidden="true">
             <GemSVG color={effectiveColor} size={48} />
           </span>

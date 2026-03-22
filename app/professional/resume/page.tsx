@@ -34,31 +34,19 @@ export default function ResumePage() {
           </a>
         </div>
 
-        {/* Resume viewer placeholder */}
-        <div
+        {/* Resume PDF viewer */}
+        <iframe
+          src="/resume.pdf"
+          title="Matthew's Resume"
           style={{
-            background: '#111111',
+            width: '100%',
+            height: '90vh',
             border: '1px solid #1E1E1E',
             borderRadius: '2px',
-            minHeight: '900px',
-            display: 'flex',
-            flexDirection: 'column',
-            alignItems: 'center',
-            justifyContent: 'center',
-            gap: '1rem',
-            padding: '3rem',
+            background: '#111111',
+            display: 'block',
           }}
-        >
-          <div style={{ fontFamily: 'var(--font-mono)', fontSize: '0.65rem', letterSpacing: '0.12em', textTransform: 'uppercase', color: '#333333' }}>
-            Resume PDF viewer
-          </div>
-          <p style={{ fontFamily: 'var(--font-sans)', fontSize: '0.85rem', color: '#444444', textAlign: 'center', maxWidth: '320px', lineHeight: 1.7 }}>
-            Drop your resume PDF at <code style={{ background: '#0D0D0D', padding: '2px 6px', borderRadius: '2px', color: '#00E5FF', fontSize: '0.8rem' }}>/public/resume.pdf</code> and it will appear here.
-          </p>
-          <a href="/resume.pdf" download className="btn btn-accent" style={{ fontSize: '0.68rem' }}>
-            ↓ Download Resume
-          </a>
-        </div>
+        />
       </div>
     </PageTransition>
   );

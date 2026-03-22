@@ -42,10 +42,12 @@
   --c-text:            #0D0D0D;
   --c-text-sub:        #2A2A2A;
   --c-muted:           #555555;
-  --c-accent:          #007FA3;
-  --c-accent-rgb:      0, 127, 163;
-  --c-accent-dim:      rgba(0, 127, 163, 0.1);
-  --c-accent-alt:      #CC3333;
+  /* Darkened from #007FA3 → #006B8C for WCAG AA contrast (≥4.5:1 on light bg) */
+  --c-accent:          #006B8C;
+  --c-accent-rgb:      0, 107, 140;
+  --c-accent-dim:      rgba(0, 107, 140, 0.1);
+  /* Darkened from #CC3333 → #B52A2A for WCAG AA contrast (≥4.5:1 on light bg) */
+  --c-accent-alt:      #B52A2A;
   --c-nav-bg:          rgba(237, 235, 229, 0.8);
   --c-nav-bg-scroll:   rgba(237, 235, 229, 0.96);
   --c-dropdown-bg:     #E4E1DB;
@@ -53,8 +55,8 @@
   --c-input-bg:        #E4E1DB;
   --c-scrollbar-track: #EDEBE5;
   --c-scrollbar-thumb: #1A1A1A;
-  --c-selection-bg:    rgba(0, 127, 163, 0.2);
-  --c-selection-text:  #007FA3;
+  --c-selection-bg:    rgba(0, 107, 140, 0.2);
+  --c-selection-text:  #006B8C;
 }
 
 /* ─── Skip to Content Link ─────────────────────────────── */
@@ -99,6 +101,18 @@
 @media (pointer: coarse) {
   *, *::before, *::after {
     cursor: auto !important;
+  }
+}
+
+/* Restore system cursor + hide decorative follower in Windows High Contrast
+   / forced-colors mode so magnification tools can still track the pointer. */
+@media (forced-colors: active) {
+  *, *::before, *::after {
+    cursor: auto !important;
+  }
+  .cursor-dot,
+  .cursor-ring {
+    display: none !important;
   }
 }
 
@@ -312,6 +326,14 @@ input:focus, textarea:focus, select:focus {
   box-shadow: 0 0 0 2px rgba(var(--c-accent-rgb), 0.08);
 }
 
+/* Restore visible focus ring for keyboard users.
+   Specificity (0,1,1) beats the base `input { outline: none }` (0,0,1),
+   so keyboard navigation gets a clear accent outline. */
+input:focus-visible, textarea:focus-visible, select:focus-visible {
+  outline: 2px solid var(--c-accent);
+  outline-offset: 2px;
+}
+
 input::placeholder, textarea::placeholder {
   color: var(--c-muted);
   opacity: 0.6;
@@ -380,8 +402,8 @@ label {
 
 [data-theme="light"] .homepage-bg {
   background:
-    radial-gradient(ellipse 80% 60% at 20% 40%, rgba(0, 127, 163, 0.06) 0%, transparent 60%),
-    radial-gradient(ellipse 60% 80% at 80% 70%, rgba(200, 80, 80, 0.025) 0%, transparent 60%),
+    radial-gradient(ellipse 80% 60% at 20% 40%, rgba(0, 107, 140, 0.06) 0%, transparent 60%),
+    radial-gradient(ellipse 60% 80% at 80% 70%, rgba(181, 42, 42, 0.025) 0%, transparent 60%),
     #EDEBE5 !important;
 }
 

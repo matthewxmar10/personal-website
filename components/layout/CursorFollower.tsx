@@ -57,9 +57,10 @@ export default function CursorFollower() {
 
   return (
     <>
-      {/* Inner dot */}
+      {/* Inner dot — class used by forced-colors CSS to hide in high-contrast mode */}
       <div
         ref={dotRef}
+        className="cursor-dot"
         style={{
           position: 'fixed',
           top: 0,
@@ -67,17 +68,18 @@ export default function CursorFollower() {
           width: 8,
           height: 8,
           borderRadius: '50%',
-          backgroundColor: '#00E5FF',
-          boxShadow: '0 0 6px rgba(0,229,255,0.8), 0 0 12px rgba(0,229,255,0.4)',
+          backgroundColor: 'var(--c-accent)',
+          boxShadow: '0 0 6px rgba(var(--c-accent-rgb), 0.8), 0 0 12px rgba(var(--c-accent-rgb), 0.4)',
           pointerEvents: 'none',
           zIndex: 99999,
           transition: 'opacity 0.3s ease',
           willChange: 'transform',
         }}
       />
-      {/* Outer ring */}
+      {/* Outer ring — class used by forced-colors CSS to hide in high-contrast mode */}
       <div
         ref={ringRef}
+        className="cursor-ring"
         style={{
           position: 'fixed',
           top: 0,
@@ -85,8 +87,8 @@ export default function CursorFollower() {
           width: 32,
           height: 32,
           borderRadius: '50%',
-          border: '1px solid rgba(0,229,255,0.4)',
-          boxShadow: '0 0 8px rgba(0,229,255,0.15)',
+          border: '1px solid rgba(var(--c-accent-rgb), 0.4)',
+          boxShadow: '0 0 8px rgba(var(--c-accent-rgb), 0.15)',
           pointerEvents: 'none',
           zIndex: 99998,
           transition: 'opacity 0.3s ease',

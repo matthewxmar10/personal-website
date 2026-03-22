@@ -26,7 +26,7 @@ const NAV_ITEMS: NavItem[] = [
     label: 'Professional',
     children: [
       { label: 'What I Do', href: '/professional/what-i-do' },
-      { label: 'Portfolio', href: '/professional/portfolio' },
+      { label: 'Design Portfolio', href: '/professional/portfolio' },
       { label: 'Resume', href: '/professional/resume' },
     ],
   },
@@ -124,13 +124,15 @@ function DropdownMenu({ items, visible, id }: { items: { label: string; href: st
       }}
     >
       {items.map((item) => (
-        <DropdownLink key={item.href} href={item.href} label={item.label} />
+        // tabIndex={-1} when hidden prevents keyboard users from accidentally
+        // tabbing into an invisible dropdown
+        <DropdownLink key={item.href} href={item.href} label={item.label} tabIndex={visible ? 0 : -1} />
       ))}
     </div>
   );
 }
 
-function DropdownLink({ href, label }: { href: string; label: string }) {
+function DropdownLink({ href, label, tabIndex }: { href: string; label: string; tabIndex?: number }) {
   const pathname = usePathname();
   const isActive = pathname === href;
 
@@ -138,6 +140,7 @@ function DropdownLink({ href, label }: { href: string; label: string }) {
     <Link
       href={href}
       role="menuitem"
+      tabIndex={tabIndex}
       aria-current={isActive ? 'page' : undefined}
       style={{
         display: 'block',
@@ -185,6 +188,11 @@ function NavItemComponent({ item }: { item: NavItem }) {
   useEffect(() => { setOpen(false); }, [pathname]);
   useEffect(() => () => clearTimeout(timerRef.current), []);
 
+  // Keyboard: Escape closes the dropdown
+  const handleKeyDown = (e: React.KeyboardEvent) => {
+    if (e.key === 'Escape') setOpen(false);
+  };
+
   const linkStyle = {
     fontFamily: 'var(--font-mono)',
     fontSize: '0.72rem',
@@ -228,6 +236,9 @@ function NavItemComponent({ item }: { item: NavItem }) {
         aria-expanded={open}
         aria-haspopup="true"
         aria-controls={menuId}
+        // onClick lets keyboard and switch-access users toggle the dropdown
+        onClick={() => setOpen((o) => !o)}
+        onKeyDown={handleKeyDown}
         style={{ ...linkStyle, background: 'none', border: 'none', padding: '4px 0', display: 'flex', alignItems: 'center', gap: '4px' }}
         onMouseEnter={(e) => {
           if (!isActive) {

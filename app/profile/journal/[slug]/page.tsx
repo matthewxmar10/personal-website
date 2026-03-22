@@ -1,46 +1,51 @@
-'use client';
-
 import Link from 'next/link';
+import { notFound } from 'next/navigation';
 import PageTransition from '@/components/ui/PageTransition';
-
+import { getJournalEntry, getJournalEntries } from '@/lib/markdown';
 
 const DAYS = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
 
-// Placeholder content — will be driven by MDX files later
-const PLACEHOLDER_CONTENT = `Today was one of those days where everything seemed to click. Started the morning with coffee and some reading, then spent a few hours working on music.
+type Props = { params: Promise<{ slug: string }> };
 
-There's something meditative about the process of layering sounds — you start with nothing and slowly, a mood emerges. I didn't finish the track, but I got further than I expected.
+export async function generateStaticParams() {
+  return getJournalEntries().map(e => ({ slug: e.slug }));
+}
 
-In the evening, caught up with some old friends online. The kind of easy conversation that reminds you what matters.`;
+export async function generateMetadata({ params }: Props) {
+  const { slug } = await params;
+  const entry = await getJournalEntry(slug);
+  if (!entry) return {};
+  const d = new Date(entry.date + 'T12:00:00');
+  const formatted = d.toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' });
+  return { title: `${formatted} — Journal — Matthew` };
+}
 
-export default function JournalEntryPage({ params }: { params: Promise<{ slug: string }> }) {
-  // In real implementation: read from /content/journal/[slug].mdx
-  // For now, show a placeholder
-  const slugValue = 'entry'; // Will come from params in real impl
+export default async function JournalEntryPage({ params }: Props) {
+  const { slug } = await params;
+  const entry = await getJournalEntry(slug);
+  if (!entry) notFound();
 
-  void params; // used later when MDX is connected
-
-  const date = new Date();
-  const dayName = DAYS[date.getDay()];
-  const formatted = date.toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' });
+  const d         = new Date(entry.date + 'T12:00:00');
+  const dayName   = DAYS[d.getDay()];
+  const formatted = d.toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' });
 
   return (
     <PageTransition>
       <div className="container" style={{ paddingBottom: '4rem', maxWidth: '720px' }}>
+
         {/* Back link */}
         <div style={{ padding: '2rem 0 1.5rem' }}>
           <Link
             href="/profile/journal"
+            className="hover-accent"
             style={{
               fontFamily: 'var(--font-mono)',
               fontSize: '0.65rem',
               letterSpacing: '0.1em',
               textTransform: 'uppercase',
-              color: '#444444',
-              transition: 'color 0.15s ease',
+              color: 'var(--c-muted)',
+              textDecoration: 'none',
             }}
-            onMouseEnter={(e) => ((e.target as HTMLElement).style.color = '#00E5FF')}
-            onMouseLeave={(e) => ((e.target as HTMLElement).style.color = '#444444')}
           >
             ← Back to Journal
           </Link>
@@ -48,33 +53,56 @@ export default function JournalEntryPage({ params }: { params: Promise<{ slug: s
 
         {/* Date header */}
         <div style={{ marginBottom: '2.5rem' }}>
-          <div style={{ fontFamily: 'var(--font-mono)', fontSize: '0.7rem', letterSpacing: '0.15em', textTransform: 'uppercase', color: '#444444', marginBottom: '0.4rem' }}>
+          <div style={{
+            fontFamily: 'var(--font-mono)',
+            fontSize: '0.7rem',
+            letterSpacing: '0.15em',
+            textTransform: 'uppercase',
+            color: 'var(--c-muted)',
+            marginBottom: '0.4rem',
+          }}>
             {dayName}
           </div>
-          <h1 style={{ fontFamily: 'var(--font-mono)', fontSize: 'clamp(1.4rem, 4vw, 2rem)', fontWeight: 500, letterSpacing: '-0.02em', color: '#E8E6E1', margin: 0 }}>
+          <h1 style={{
+            fontFamily: 'var(--font-mono)',
+            fontSize: 'clamp(1.4rem, 4vw, 2rem)',
+            fontWeight: 500,
+            letterSpacing: '-0.02em',
+            color: 'var(--c-text)',
+            margin: 0,
+          }}>
             {formatted}
           </h1>
-          <div style={{ marginTop: '0.5rem', fontFamily: 'var(--font-mono)', fontSize: '0.65rem', color: '#333333', letterSpacing: '0.06em' }}>
-            Entry #{slugValue}
-          </div>
         </div>
 
         <div className="divider" />
 
         {/* Content */}
-        <div className="prose">
-          {PLACEHOLDER_CONTENT.split('\n\n').map((para, i) => (
-            <p key={i}>{para}</p>
-          ))}
-        </div>
+        <div
+          className="prose"
+          dangerouslySetInnerHTML={{ __html: entry.contentHtml }}
+        />
 
         <div className="divider" />
 
-        {/* Nav between entries */}
-        <div style={{ display: 'flex', justifyContent: 'space-between' }}>
-          <button className="btn" style={{ fontSize: '0.68rem' }}>← Previous day</button>
-          <button className="btn" style={{ fontSize: '0.68rem' }}>Next day →</button>
+        {/* Prev / Next navigation */}
+        <div style={{ display: 'flex', justifyContent: 'space-between', gap: '1rem' }}>
+          {entry.prev ? (
+            <Link href={`/profile/journal/${entry.prev}`} className="btn" style={{ fontSize: '0.68rem' }}>
+              ← Previous entry
+            </Link>
+          ) : (
+            <span />
+          )}
+          {entry.next ? (
+            <Link href={`/profile/journal/${entry.next}`} className="btn" style={{ fontSize: '0.68rem' }}>
+              Next entry →
+            </Link>
+          ) : (
+            <span />
+          )}
         </div>
+
       </div>
     </PageTransition>
   );
